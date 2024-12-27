@@ -23,7 +23,7 @@ export default function Page() {
   const [firstChoice, setFirstChoice] = useState<string | null>(null);
   const [secondChoice, setSecondChoice] = useState<string | null>(null);
 
-  const [submitted, setSubmitted] = useState(false); // New state to track submission status
+  const [submitted, setSubmitted] = useState(false);
 
   const handleLogin = async () => {
     const response = await fetch("/api/registration", {
@@ -34,7 +34,6 @@ export default function Page() {
 
     if (response.ok) {
       const data = await response.json();
-      // Check if message indicates the user has already selected topics
       if (data.message && data.message === "You have already selected your topics!") {
         alert(data.message);
       } else {
@@ -80,7 +79,7 @@ export default function Page() {
       body: JSON.stringify({ action: "submitSelections", prn, firstChoice, secondChoice }),
     });
     if (response.ok) {
-      setSubmitted(true); // Set submitted state to true to show "Thank You"
+      setSubmitted(true);
     } else {
       alert("Failed to submit selections!");
     }
