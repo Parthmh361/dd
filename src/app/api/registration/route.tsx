@@ -15,8 +15,19 @@ export const POST = async (req: Request) => {
     try {
       const faculty = await Faculty.create({ name, topics });
       return new Response(JSON.stringify(faculty), { status: 201 });
-    } catch (error: Error) {
-      return new Response(JSON.stringify({ message: error.message }), { status: 500 });
+    } catch{
+      if (action === "addFaculty") {
+        if (!name || !topics) {
+          return new Response(JSON.stringify({ message: "Invalid request data" }), { status: 400 });
+        }
+        try {
+          const faculty = await Faculty.create({ name, topics });
+          return new Response(JSON.stringify(faculty), { status: 201 });
+        } catch{
+          return new Response(JSON.stringify({ message: "An unexpected error occurred" }), { status: 500 });
+        }
+      }
+      
     }
   }
 

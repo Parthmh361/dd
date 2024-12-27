@@ -65,12 +65,19 @@ export default function Page() {
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ action: "selectTopic", prn, facultyId, topicName, isFirstChoice }),
     });
+  
     if (response.ok) {
-      isFirstChoice ? setFirstChoice(topicName) : setSecondChoice(topicName);
+      // Update state based on whether it's the first or second choice
+      if (isFirstChoice) {
+        setFirstChoice(topicName);
+      } else {
+        setSecondChoice(topicName);
+      }
     } else {
       alert("Topic selection failed!");
     }
   };
+  
 
   const handleFinalSubmit = async () => {
     const response = await fetch("/api/registration", {
