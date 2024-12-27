@@ -6,7 +6,7 @@ export const POST = async (req: Request) => {
   await connect();
 
   const body = await req.json();
-  const { action, prn, dob, facultyId, topicName, isFirstChoice, name, topics, firstChoice, secondChoice } = body;
+  const { action, prn, dob, facultyId, topicName, isFirstChoice, name, topics } = body;
 
   if (action === "addFaculty") {
     if (!name || !topics) {
@@ -15,7 +15,7 @@ export const POST = async (req: Request) => {
     try {
       const faculty = await Faculty.create({ name, topics });
       return new Response(JSON.stringify(faculty), { status: 201 });
-    } catch (error: any) {
+    } catch (error: Error) {
       return new Response(JSON.stringify({ message: error.message }), { status: 500 });
     }
   }
@@ -23,21 +23,20 @@ export const POST = async (req: Request) => {
   if (action === "login") {
     // Check if the user already exists
     let user = await User.findOne({ prn, dob });
-  
+
     // If user doesn't exist, create a new one
     if (!user) {
       user = new User({ prn, dob });
       await user.save();  // Save the new user
     }
-  
+
     // Check if the user has already selected topics
     if (user.firstChoice && user.secondChoice) {
       return new Response(JSON.stringify({ message: "You have already selected your topics!" }), { status: 400 });
     }
-  
+
     return new Response(JSON.stringify(user), { status: 200 });
   }
-  
 
   if (action === "getFaculties") {
     const faculties = await Faculty.find({});
