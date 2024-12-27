@@ -1,15 +1,12 @@
-import mongoose, { Schema, Document } from 'mongoose';
+import mongoose from "mongoose";
 
-interface IUser extends Document {
-  name: string;
-  dob: string;
-}
-
-const userSchema = new Schema<IUser>({
-  name: { type: String, required: true },
+const userSchema = new mongoose.Schema({
+  prn: { type: String, required: true, unique: true },
   dob: { type: String, required: true },
+  firstChoice: { type: String, default: null },
+  secondChoice: { type: String, default: null },
 });
 
-const User = mongoose.models.User || mongoose.model<IUser>('Userpbl', userSchema);
-
-export default User;
+// Prevent overwriting of the model
+export const User =
+  mongoose.models.Userpbl || mongoose.model("Userpbl", userSchema);
